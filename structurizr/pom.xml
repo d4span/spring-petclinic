@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="https://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.example</groupId>
+    <artifactId>structurizr</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <structurizr.version>4.0.0</structurizr.version>
+    </properties>
+
+    <dependencies>
+        <!-- Structurizr Core - provides the model and view definitions -->
+        <dependency>
+            <groupId>com.structurizr</groupId>
+            <artifactId>structurizr-core</artifactId>
+            <version>${structurizr.version}</version>
+        </dependency>
+        
+        <!-- Structurizr Client - allows you to upload your model to the Structurizr service -->
+        <dependency>
+            <groupId>com.structurizr</groupId>
+            <artifactId>structurizr-client</artifactId>
+            <version>${structurizr.version}</version>
+        </dependency>
+        
+        <!-- Structurizr DSL - for working with the Structurizr DSL -->
+        <dependency>
+            <groupId>com.structurizr</groupId>
+            <artifactId>structurizr-dsl</artifactId>
+            <version>${structurizr.version}</version>
+        </dependency>
+        
+        <!-- Structurizr Export - for exporting diagrams to various formats -->
+        <dependency>
+            <groupId>com.structurizr</groupId>
+            <artifactId>structurizr-export</artifactId>
+            <version>${structurizr.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
