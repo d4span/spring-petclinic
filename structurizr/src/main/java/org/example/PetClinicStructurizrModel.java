@@ -35,13 +35,12 @@ public class PetClinicStructurizrModel {
 
     SoftwareSystem petClinic =
         model.addSoftwareSystem(
-            "Spring PetClinic",
-            "Allows veterinarians to view and manage pet information and visits");
+            "Spring PetClinic", "Allows to view and manage pet information and visits");
 
     Container webApplication =
         petClinic.addContainer(
             "Web Application",
-            "The web application providing the user interface for vets and pet owners",
+            "The web application providing the user interface",
             "Spring Boot, Spring MVC, Thymeleaf");
 
     Container database =
@@ -54,7 +53,10 @@ public class PetClinicStructurizrModel {
 
     ComponentFinderStrategy componentFinderStrategy =
         new ComponentFinderStrategyBuilder()
-            .matchedBy(type -> type.getFullyQualifiedName().contains("samples.petclinic"))
+            .matchedBy(
+                type -> {
+                  return type.getFullyQualifiedName().contains("petclinic");
+                })
             .withName(
                 type -> {
                   types.put(type.getName(), type);
