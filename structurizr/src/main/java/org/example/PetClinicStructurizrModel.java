@@ -27,8 +27,6 @@ public class PetClinicStructurizrModel {
     Workspace workspace =
         new Workspace("Spring PetClinic", "A model of the Spring PetClinic application");
     Model model = workspace.getModel();
-    model.setImpliedRelationshipsStrategy(
-        new CreateImpliedRelationshipsUnlessSameRelationshipExistsStrategy());
     ViewSet views = workspace.getViews();
 
     Person user = model.addPerson("User", "A user who uses the system");
@@ -47,8 +45,6 @@ public class PetClinicStructurizrModel {
         petClinic.addContainer(
             "Database", "Stores pet, owner, vet, and visit information", "H2 / MySQL / PostgreSQL");
 
-    webApplication.uses(database, "");
-
     var types = new HashMap<String, Type>();
 
     ComponentFinderStrategy componentFinderStrategy =
@@ -66,26 +62,24 @@ public class PetClinicStructurizrModel {
                 component -> {
                   var type = types.get(component.getName());
 
-                  component.addTags("class");
-                  component.setGroup(type.getPackageName());
-
                   var packageComponent = webApplication.getComponentWithName(type.getPackageName());
                   if (packageComponent == null) {
                     packageComponent =
                         webApplication.addComponent(type.getPackageName(), "", "Java Package");
-                    if (component.getName().contains("Repository")) {
-                      packageComponent.uses(database, "");
-                    }
-
-                    if (component.getName().contains("Controller")) {
-                      user.uses(packageComponent, "uses");
-                    }
                   }
 
                   packageComponent.addTags("package");
 
                   addRelationshipsBetweenPackages(
                       component, types, webApplication, packageComponent);
+
+                  if (type.getName().contains("Repository")) {
+                    packageComponent.uses(database, "uses");
+                  }
+
+                  if (type.getName().contains("Controller")) {
+                    user.uses(packageComponent, "uses");
+                  }
                 })
             .build();
 
@@ -116,16 +110,13 @@ public class PetClinicStructurizrModel {
     packages.forEach(
         c -> {
           packagesView.add(c);
+          c.getRelationships().forEach(
+              relationship -> {
+                packagesView.add(relationship);
+              });
         });
     packagesView.addAllPeople();
     packagesView.addAllContainers();
-
-    // var classes =
-    //     webApplication.getComponents().stream()
-    //         .filter(component -> component.getTags().contains("class"))
-    //         .toList();
-    // var classesView = views.createComponentView(webApplication, "Classes", "");
-    // classes.forEach(c -> classesView.add(c));
 
     Styles styles = views.getConfiguration().getStyles();
     styles.addElementStyle(Tags.SOFTWARE_SYSTEM).background("#1168bd").color("#ffffff");
