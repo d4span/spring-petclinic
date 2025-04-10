@@ -5,61 +5,60 @@ import java.util.HashMap;
 
 import com.structurizr.Workspace;
 import com.structurizr.component.ComponentFinderBuilder;
-import com.structurizr.component.ComponentFinderStrategy;
 import com.structurizr.component.ComponentFinderStrategyBuilder;
 import com.structurizr.component.Type;
 import com.structurizr.model.Component;
 import com.structurizr.model.Container;
 import com.structurizr.model.CreateImpliedRelationshipsUnlessSameRelationshipExistsStrategy;
-import com.structurizr.model.Model;
-import com.structurizr.model.Person;
-import com.structurizr.model.SoftwareSystem;
+import com.structurizr.model.Relationship;
 import com.structurizr.model.Tags;
 import com.structurizr.util.WorkspaceUtils;
 import com.structurizr.view.Shape;
 import com.structurizr.view.Styles;
-import com.structurizr.view.ViewSet;
 
 /** A simple example that creates a Structurizr model for the Spring PetClinic application. */
 public class PetClinicStructurizrModel {
 
   public static void main(String[] args) throws Exception {
-    Workspace workspace =
+    var workspace =
         new Workspace("Spring PetClinic", "A model of the Spring PetClinic application");
-    Model model = workspace.getModel();
-    ViewSet views = workspace.getViews();
+    var model = workspace.getModel();
+    model.setImpliedRelationshipsStrategy(
+        new CreateImpliedRelationshipsUnlessSameRelationshipExistsStrategy());
 
-    Person user = model.addPerson("User", "A user who uses the system");
+    var views = workspace.getViews();
 
-    SoftwareSystem petClinic =
+    var user = model.addPerson("User", "A user who uses the system");
+
+    var petClinic =
         model.addSoftwareSystem(
             "Spring PetClinic", "Allows to view and manage pet information and visits");
 
-    Container webApplication =
+    var webApplication =
         petClinic.addContainer(
             "Web Application",
             "The web application providing the user interface",
             "Spring Boot, Spring MVC, Thymeleaf");
 
-    Container database =
+    var database =
         petClinic.addContainer(
             "Database", "Stores pet, owner, vet, and visit information", "H2 / MySQL / PostgreSQL");
 
     var types = new HashMap<String, Type>();
 
-    ComponentFinderStrategy componentFinderStrategy =
+    var componentFinderStrategy =
         new ComponentFinderStrategyBuilder()
             .matchedBy(
-                type -> {
+                (Type type) -> {
                   return type.getFullyQualifiedName().contains("petclinic");
                 })
             .withName(
-                type -> {
+                (Type type) -> {
                   types.put(type.getName(), type);
                   return type.getName();
                 })
             .forEach(
-                component -> {
+                (Component component) -> {
                   var type = types.get(component.getName());
 
                   var packageComponent = webApplication.getComponentWithName(type.getPackageName());
@@ -108,12 +107,13 @@ public class PetClinicStructurizrModel {
             .toList();
     var packagesView = views.createComponentView(webApplication, "Packages", "");
     packages.forEach(
-        c -> {
+        (Component c) -> {
           packagesView.add(c);
-          c.getRelationships().forEach(
-              relationship -> {
-                packagesView.add(relationship);
-              });
+          c.getRelationships()
+              .forEach(
+                  (Relationship relationship) -> {
+                    packagesView.add(relationship);
+                  });
         });
     packagesView.addAllPeople();
     packagesView.addAllContainers();
