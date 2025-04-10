@@ -14,7 +14,6 @@ import com.structurizr.model.Relationship;
 import com.structurizr.model.Tags;
 import com.structurizr.util.WorkspaceUtils;
 import com.structurizr.view.Shape;
-import com.structurizr.view.Styles;
 
 /** A simple example that creates a Structurizr model for the Spring PetClinic application. */
 public class PetClinicStructurizrModel {
@@ -25,8 +24,6 @@ public class PetClinicStructurizrModel {
     var model = workspace.getModel();
     model.setImpliedRelationshipsStrategy(
         new CreateImpliedRelationshipsUnlessSameRelationshipExistsStrategy());
-
-    var views = workspace.getViews();
 
     var user = model.addPerson("User", "A user who uses the system");
 
@@ -43,6 +40,7 @@ public class PetClinicStructurizrModel {
     var database =
         petClinic.addContainer(
             "Database", "Stores pet, owner, vet, and visit information", "H2 / MySQL / PostgreSQL");
+    database.addTags("database");
 
     var types = new HashMap<String, Type>();
 
@@ -92,6 +90,8 @@ public class PetClinicStructurizrModel {
     componentFinder.run();
 
     // Create views
+    var views = workspace.getViews();
+
     var contextView = views.createSystemContextView(petClinic, "System Context", "");
     contextView.addAllSoftwareSystems();
     contextView.addAllPeople();
@@ -118,9 +118,10 @@ public class PetClinicStructurizrModel {
     packagesView.addAllPeople();
     packagesView.addAllContainers();
 
-    Styles styles = views.getConfiguration().getStyles();
+    var styles = views.getConfiguration().getStyles();
     styles.addElementStyle(Tags.SOFTWARE_SYSTEM).background("#1168bd").color("#ffffff");
     styles.addElementStyle(Tags.PERSON).background("#08427b").color("#ffffff").shape(Shape.Person);
+    styles.addElementStyle("database").shape(Shape.Cylinder);
 
     WorkspaceUtils.saveWorkspaceToJson(workspace, new File("workspace.json"));
   }
