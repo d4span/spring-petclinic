@@ -1,0 +1,19 @@
+jqassistant:
+  plugins:
+    - group-id: org.jqassistant.plugin
+      artifact-id: jqassistant-spring-plugin
+      version: 2.2.1
+    - group-id: org.jqassistant.plugin
+      artifact-id: jqassistant-plantuml-report-plugin
+      version: 2.0.1
+
+  analyze:
+    rule:
+      default-concept-severity: INFO #default: MINOR
+
+    report:
+      warn-on-severity: MINOR
+      fail-on-severity: BLOCKER #default: MAJOR
+
+    groups:
+      - default
