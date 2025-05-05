@@ -1,0 +1,13 @@
+@startuml
+package PetClinic {
+    [Model] <<org.springframework.samples.petclinic.model>>
+    [Vet] <<org.springframework.samples.petclinic.vet>>
+    [Owner] <<org.springframework.samples.petclinic.owner>>
+    [Base Package] <<org.springframework.samples.petclinic>>
+}
+
+[Owner] -up-> [Model]
+[Vet] --> [Model]
+[Base Package] --> [Model]
+[Base Package] --> [Vet]
+@enduml
